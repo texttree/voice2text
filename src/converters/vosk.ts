@@ -90,14 +90,14 @@ export class Vosk implements VoiceToTextConverter {
         const recognizer: KaldiRecognizer = new model.KaldiRecognizer(
           this.sampleRate,
         );
-        // recognizer.setWords(true);
+        recognizer.setWords(true);
         this.model = model;
         this.recognizer = recognizer;
         recognizer.on("result", (message: ServerMessageResult) => {
-          const result = message.result.text;
-          if (result && this.result !== result) {
-            this.result = result;
-            this.newEvent("FINAL", result);
+          const result = message.result;
+          if (result.text && this.result !== result.text) {
+            this.result = result.text;
+            this.newEvent("FINAL", result.text, result.result);
           }
         });
         recognizer.on(
@@ -192,13 +192,17 @@ export class Vosk implements VoiceToTextConverter {
     this.language = options?.language;
   }
 
-  newEvent(type: "FINAL" | "PARTIAL" | "STATUS", text: string) {
+  newEvent(type: "FINAL" | "PARTIAL" | "STATUS", text: string, result? : {conf: number, end: number, start: number, word: string}[]) {
+    const detail: DetailType = {
+      text,
+      type,
+      id: this.id,
+    }
+    if (result) {
+      detail["result"] = result
+    }
     const event = new CustomEvent("voice", {
-      detail: {
-        text,
-        type,
-        id: this.id,
-      },
+      detail,
     });
     window.dispatchEvent(event);
     if (type === "STATUS" && text === "LOADED" && this?.delayedStart) {

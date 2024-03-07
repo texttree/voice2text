@@ -163,14 +163,14 @@ class Vosk {
                 const model = await createModel(this.language ? this.models[this.language] : this.modelUrl);
                 model.setLogLevel(-2);
                 const recognizer = new model.KaldiRecognizer(this.sampleRate);
-                // recognizer.setWords(true);
+                recognizer.setWords(true);
                 this.model = model;
                 this.recognizer = recognizer;
                 recognizer.on("result", (message) => {
-                    const result = message.result.text;
-                    if (result && this.result !== result) {
-                        this.result = result;
-                        this.newEvent("FINAL", result);
+                    const result = message.result;
+                    if (result.text && this.result !== result.text) {
+                        this.result = result.text;
+                        this.newEvent("FINAL", result.text, result.result);
                     }
                 });
                 recognizer.on("partialresult", (message) => {
@@ -252,13 +252,17 @@ class Vosk {
         this.stop();
         this.language = options?.language;
     }
-    newEvent(type, text) {
+    newEvent(type, text, result) {
+        const detail = {
+            text,
+            type,
+            id: this.id,
+        };
+        if (result) {
+            detail["result"] = result;
+        }
         const event = new CustomEvent("voice", {
-            detail: {
-                text,
-                type,
-                id: this.id,
-            },
+            detail,
         });
         window.dispatchEvent(event);
         if (type === "STATUS" && text === "LOADED" && this?.delayedStart) {

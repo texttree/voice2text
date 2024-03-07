@@ -56,6 +56,13 @@ interface ResultEvent {
   text: string;
 }
 
+type DetailType = {
+  text: string;
+  type: "FINAL" | "PARTIAL" | "STATUS";
+  id: string;
+  result?: { conf: number; end: number; start: number; word: string }[];
+};
+
 interface PartialResultEvent {
   text: string;
 }
