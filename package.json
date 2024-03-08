@@ -1,7 +1,7 @@
 {
-  "name": "voice2text",
+  "name": "@texttree/voice2text",
   "version": "0.5.2",
-  "description": "speech to text functionality with minimum configuration and maximum compatibility",
+  "description": "(fork of @m-abdi/voice2text)speech to text functionality with minimum configuration and maximum compatibility",
   "main": "dist/voice2text.js",
   "types": "dist/voice2text.d.ts",
   "files": [
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/m-abdi/voice2text.git"
+    "url": "git+https://github.com/texttree/voice2text.git"
   },
   "keywords": [
     "vosk",
@@ -35,9 +35,9 @@
   "author": "Mehdi Abdi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/m-abdi/voice2text/issues"
+    "url": "https://github.com/texttree/voice2text/issues"
   },
-  "homepage": "https://github.com/m-abdi/voice2text#readme",
+  "homepage": "https://github.com/texttree/voice2text#readme",
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
     "@web/rollup-plugin-import-meta-assets": "^2.2.1",
